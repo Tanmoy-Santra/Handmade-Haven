@@ -1,13 +1,19 @@
+
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { Bars3Icon, ShoppingCartIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Link, useLocation } from 'react-router-dom';
 import logo from './Assets/logo2.png';
+import { auth, db } from './Firebase'; // Import auth and db from Firebase configuration
+import { signOut } from 'firebase/auth'; // Import signOut function from Firebase auth
+import { useEffect, useState } from 'react';
+import { doc, getDoc } from 'firebase/firestore';
+import { toast } from 'react-toastify';
 
 const navigation = [
-  { name: 'HOME', to: '/', current: false },
-  { name: 'ABOUT', to: '/About', current: false },
-  { name: 'CONTACT', to: '/Contact', current: false },
-  { name: 'PRODUCT', to: '/Product', current: false },
+  { name: 'HOME', to: '/home', current: false },
+  { name: 'ABOUT', to: '/about', current: false },
+  { name: 'CONTACT', to: '/contact', current: false },
+  { name: 'PRODUCT', to: '/product', current: false },
 ];
 
 function classNames(...classes) {
@@ -16,6 +22,39 @@ function classNames(...classes) {
 
 export default function Navbar() {
   const location = useLocation();
+  const [userFirstName, setUserFirstName] = useState('');
+
+  // Fetch user information (first name) on component mount
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const user = auth.currentUser;
+        if (user) {
+          const docRef = doc(db, 'Users', user.uid);
+          const docSnap = await getDoc(docRef);
+          if (docSnap.exists()) {
+            setUserFirstName(docSnap.data().firstName);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching user information:', error.message);
+      }
+    };
+
+    fetchUserInfo();
+  }, []);
+
+  const handleSignOut = async () => {
+    try {
+      await signOut(auth);
+      toast.success('Successfully signed out');
+      // Redirect to login page after sign out
+      window.location.href = '/login'; // Alternatively, use React Router's history to navigate
+    } catch (error) {
+      console.error('Error signing out:', error.message);
+      toast.error(error.message);
+    }
+  };
 
   return (
     <Disclosure as="nav" className="custom-nav-bg">
@@ -78,6 +117,7 @@ export default function Navbar() {
                         src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                         alt=""
                       />
+                      <span className="ml-2 text-sm font-medium text-gray-300">{userFirstName}</span>
                     </MenuButton>
                   </div>
                   <MenuItems
@@ -86,32 +126,15 @@ export default function Navbar() {
                   >
                     <MenuItem>
                       {({ focus }) => (
-                        <a
-                          href="#"
-                          className={classNames(focus ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                        >
-                          Your Profile
-                        </a>
-                      )}
-                    </MenuItem>
-                    <MenuItem>
-                      {({ focus }) => (
-                        <a
-                          href="#"
-                          className={classNames(focus ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                        >
-                          Settings
-                        </a>
-                      )}
-                    </MenuItem>
-                    <MenuItem>
-                      {({ focus }) => (
-                        <a
-                          href="#"
-                          className={classNames(focus ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                        <button
+                          onClick={handleSignOut}
+                          className={classNames(
+                            focus ? 'bg-gray-100' : '',
+                            'block px-4 py-2 text-sm text-gray-700 w-full text-left'
+                          )}
                         >
                           Sign out
-                        </a>
+                        </button>
                       )}
                     </MenuItem>
                   </MenuItems>
