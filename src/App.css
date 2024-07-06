@@ -33,3 +33,17 @@
 .bg-custom-middle {
   background: linear-gradient(to right, #6f409e, #e0b8fe);
 }
+.bg-color-login{
+  background: linear-gradient(to right, #6f409e, #e0b8fe);
+}
+.bg-color-login-textarea{
+  background-color: #e0b8fe;
+}
+.profile {
+  border: 2.5px solid white;
+}
+.profile:hover{  
+  background-color:  blue;
+
+}
+

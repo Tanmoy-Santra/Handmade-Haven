@@ -8,21 +8,32 @@ import Contact from './component/Contact';
 import Product from './component/Product';
 import Login from "./component/Login";
 import SignUp from "./component/Register";
+import Error from './component/Error';
+import Loading from './component/Loding';
 
 function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  const [error, setError] = useState(null); 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setUser(user);
       setLoading(false); // Set loading to false once auth state is determined
-    });
+    },
+    (error) => {
+      setError(error); // Handle error during authentication
+      setLoading(false); // Set loading to false on error
+    }
+  );
     return () => unsubscribe();
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>; // Placeholder for loading state
+    return <Loading></Loading>; // Placeholder for loading state
+  }
+  if (error) {
+    // Handle error state, such as showing an error message or redirecting to an error page
+    return <div><Error></Error></div>;
   }
 
   return (

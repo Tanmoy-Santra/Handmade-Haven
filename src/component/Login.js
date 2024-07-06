@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "./Firebase";
-import { toast } from "react-toastify";
-import { Link, useNavigate } from 'react-router-dom';
-import SignInWithGoogle from "./SigninWithgoogle"; // Ensure this path is correct
-
+import { useNavigate } from 'react-router-dom';
+import SignInWithGoogle from "./SigninWithgoogle";
+import { Link } from "react-router-dom";
 import './login.css';
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+ 
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -17,20 +17,16 @@ const Login = () => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       console.log("User logged in Successfully", userCredential.user);
-      toast.success("User logged in Successfully", {
-        position: "top-center",
-      });
-      navigate("/home"); // Navigate to home page after successful login
+      alert("logged in Successfully..")
+      navigate("/home");
     } catch (error) {
       console.error("Error logging in:", error.message);
-      toast.error(error.message, {
-        position: "bottom-center",
-      });
+      alert("Failed to login !!")
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 bg-color-login">
       <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-md w-full max-w-sm">
         <h3 className="text-2xl font-bold mb-4">Login</h3>
 
@@ -57,15 +53,17 @@ const Login = () => {
         </div>
 
         <div className="flex items-center justify-between mb-4">
-          <button type="submit" className="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline">
+          <button type="submit" className="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline btn-custom-color">
             Submit
           </button>
         </div>
 
+        
+
         <p className="text-center text-sm text-gray-600">
           New user? <Link to="/register" className="text-blue-500 hover:underline">Register Here</Link>
         </p>
-        
+
         <SignInWithGoogle />
       </form>
     </div>

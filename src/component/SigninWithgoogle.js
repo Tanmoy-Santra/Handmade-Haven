@@ -41,7 +41,7 @@
 import React from 'react';
 
 const SignInWithGoogle = () => {
-  return <div>Sign In with Google</div>;
+  return <div> </div>;
 };
 
 export default SignInWithGoogle;

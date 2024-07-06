@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "./Firebase";
 import { setDoc, doc } from "firebase/firestore";
-import { toast } from "react-toastify";
+import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import './login.css'; // Ensure correct CSS import if needed
 
@@ -11,7 +11,7 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [fname, setFname] = useState("");
   const [lname, setLname] = useState("");
-
+  const navigate = useNavigate();
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
@@ -27,20 +27,16 @@ const Register = () => {
           photo: "" // Example field, adjust as per your database structure
         });
       }
-
-      toast.success("User Registered Successfully!!", {
-        position: "top-center",
-      });
+      alert("User Registered Successfully!!")
+      navigate("/home");     
     } catch (error) {
       console.error("Error registering user:", error.message);
-      toast.error(error.message, {
-        position: "bottom-center",
-      });
+      alert(error.message)
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100  bg-color-login">
       <form onSubmit={handleRegister} className="bg-white p-6 rounded shadow-md w-full max-w-sm">
         <h3 className="text-2xl font-bold mb-4">Sign Up</h3>
 
@@ -92,7 +88,7 @@ const Register = () => {
         </div>
 
         <div className="mb-4">
-          <button type="submit" className="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline">
+          <button type="submit" className="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline btn-custom-color">
             Sign Up
           </button>
         </div>

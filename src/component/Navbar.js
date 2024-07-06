@@ -1,4 +1,3 @@
-
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { Bars3Icon, ShoppingCartIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Link, useLocation } from 'react-router-dom';
@@ -7,6 +6,7 @@ import { auth, db } from './Firebase'; // Import auth and db from Firebase confi
 import { signOut } from 'firebase/auth'; // Import signOut function from Firebase auth
 import { useEffect, useState } from 'react';
 import { doc, getDoc } from 'firebase/firestore';
+import usericon from './Assets/user-icon-new.png';
 import { toast } from 'react-toastify';
 
 const navigation = [
@@ -23,6 +23,8 @@ function classNames(...classes) {
 export default function Navbar() {
   const location = useLocation();
   const [userFirstName, setUserFirstName] = useState('');
+  const [userLastName, setUserLastName] = useState('');
+  const [userEmail, setUserEmail] = useState('');
 
   // Fetch user information (first name) on component mount
   useEffect(() => {
@@ -34,6 +36,8 @@ export default function Navbar() {
           const docSnap = await getDoc(docRef);
           if (docSnap.exists()) {
             setUserFirstName(docSnap.data().firstName);
+            setUserLastName(docSnap.data().lastName);
+            setUserEmail(docSnap.data().email);
           }
         }
       } catch (error) {
@@ -57,13 +61,13 @@ export default function Navbar() {
   };
 
   return (
-    <Disclosure as="nav" className="custom-nav-bg">
+    <Disclosure as="nav" className="custom-nav-bg fixed top-0 w-full z-50">
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
             <div className="relative flex h-16 items-center justify-between">
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-                {/* Mobile menu button*/}
+                {/* Mobile menu button */}
                 <DisclosureButton className="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-nav-text hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                   <span className="absolute -inset-0.5" />
                   <span className="sr-only">Open main menu</span>
@@ -109,30 +113,53 @@ export default function Navbar() {
                 {/* Profile dropdown */}
                 <Menu as="div" className="relative ml-3">
                   <div>
-                    <MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                      <span className="absolute -inset-1.5" />
+                    <MenuButton className="relative flex items-center rounded-full text-sm focus:outline-none hover:bg-gray-700 group">
                       <span className="sr-only">Open user menu</span>
-                      <img
-                        className="h-8 w-8 rounded-full"
-                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                        alt=""
-                      />
-                      <span className="ml-2 text-sm font-medium text-gray-300">{userFirstName}</span>
+                      <div className="relative">
+                        <img
+                          className="h-8 w-8 rounded-full object-cover"
+                          src={usericon}
+                          alt="User avatar"
+                        />
+                        <span className="absolute inset-0 rounded-full ring-2 ring-transparent group-hover:ring-purple-500 ring-offset-2 ring-offset-transparent group-hover:ring-offset-purple-400 group-hover:shadow-lg group-hover:shadow-purple-500/50 transition duration-300"></span>
+                      </div>
+                      <span className="ml-2 text-sm font-medium text-gray-300 group-hover:text-white transition duration-300 mx-2">{userFirstName}</span>
                     </MenuButton>
                   </div>
                   <MenuItems
                     transition
-                    className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+                    className="absolute right-0 z-10 mt-2 w-55 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in "
                   >
                     <MenuItem>
-                      {({ focus }) => (
-                        <button
-                          onClick={handleSignOut}
+                      {({ active }) => (
+                        <div
                           className={classNames(
-                            focus ? 'bg-gray-100' : '',
+                            active ? 'bg-gray-100' : '',
                             'block px-4 py-2 text-sm text-gray-700 w-full text-left'
                           )}
                         >
+                          <div className="flex items-center">
+                            <img
+                              className="h-20 w-20 rounded-full object-cover mx-auto"
+                              src={usericon}
+                              alt="User avatar"
+                            />
+                          </div>
+                            <div className="ml-2 mt-2 text-xl font-medium text-gray-900 mx-auto  ">{userFirstName} {userLastName}</div>
+                            <div className="ml-2 mt-2 text-sm font-small text-gray-900 mx-auto  ">{userEmail}</div>
+                        </div>
+                      )}
+                    </MenuItem>
+                    <MenuItem>
+                      {({ active }) => (
+                        <button type="button"
+                          onClick={handleSignOut}
+                          className={classNames(
+                            active ? 'bg-gray-100' : '',
+                            'block px-4 py-2 text-sm text-white w-fit text-left btn-custom-color relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white  focus:ring-offset-2 focus:ring-offset-gray-800 mx-auto my-5'
+                          )}
+                        >
+                  
                           Sign out
                         </button>
                       )}

@@ -11,7 +11,7 @@ const Home = () => {
   return (
     <div>
         <Navbar/>
-        <div class="bg-white overflow-hidden relative lg:flex lg:items-center">
+        <div class="bg-white overflow-hidden relative lg:flex lg:items-center my-20">
     <div class="w-full py-12 px-4 sm:px-6 lg:py-16 lg:px-8 z-20">
         <h2 class="text-3xl font-extrabold text-black sm:text-4xl">
             <span class="block">
