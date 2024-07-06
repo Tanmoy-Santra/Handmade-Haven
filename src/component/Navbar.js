@@ -6,7 +6,7 @@ import { auth, db } from './Firebase'; // Import auth and db from Firebase confi
 import { signOut } from 'firebase/auth'; // Import signOut function from Firebase auth
 import { useEffect, useState } from 'react';
 import { doc, getDoc } from 'firebase/firestore';
-import usericon from './Assets/user-icon-new.png';
+import usericon from './Assets/user-icon.png';
 import { toast } from 'react-toastify';
 
 const navigation = [
@@ -58,6 +58,10 @@ export default function Navbar() {
       console.error('Error signing out:', error.message);
       toast.error(error.message);
     }
+  };
+  const getInitial = (name) => {
+    if (!name) return '';
+    return name.charAt(0).toUpperCase();
   };
 
   return (
@@ -113,18 +117,15 @@ export default function Navbar() {
                 {/* Profile dropdown */}
                 <Menu as="div" className="relative ml-3">
                   <div>
-                    <MenuButton className="relative flex items-center rounded-full text-sm focus:outline-none hover:bg-gray-700 group">
-                      <span className="sr-only">Open user menu</span>
-                      <div className="relative">
-                        <img
-                          className="h-8 w-8 rounded-full object-cover"
-                          src={usericon}
-                          alt="User avatar"
-                        />
-                        <span className="absolute inset-0 rounded-full ring-2 ring-transparent group-hover:ring-purple-500 ring-offset-2 ring-offset-transparent group-hover:ring-offset-purple-400 group-hover:shadow-lg group-hover:shadow-purple-500/50 transition duration-300"></span>
-                      </div>
-                      <span className="ml-2 text-sm font-medium text-gray-300 group-hover:text-white transition duration-300 mx-2">{userFirstName}</span>
-                    </MenuButton>
+                   
+                    <MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                  <span className="absolute -inset-1.5" />
+                  <span className="sr-only">Open user menu</span>
+                  
+                  <div className="flex items-center justify-center w-8 h-8 bg-purple-500 text-white font-xl font-bold rounded-full">
+                     {getInitial(userFirstName)}
+                 </div>
+                </MenuButton>
                   </div>
                   <MenuItems
                     transition
