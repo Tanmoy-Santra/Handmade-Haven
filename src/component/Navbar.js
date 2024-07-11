@@ -1,13 +1,16 @@
-import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
+import React, { useState } from 'react';
+import { Disclosure, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { Bars3Icon, ShoppingCartIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Link, useLocation } from 'react-router-dom';
 import logo from './Assets/logo2.png';
-import { auth, db } from './Firebase'; // Import auth and db from Firebase configuration
-import { signOut } from 'firebase/auth'; // Import signOut function from Firebase auth
-import { useEffect, useState } from 'react';
+import { auth, db } from './Firebase';
+import { signOut } from 'firebase/auth';
+import { useEffect } from 'react';
 import { doc, getDoc } from 'firebase/firestore';
 import usericon from './Assets/user-icon.png';
 import { toast } from 'react-toastify';
+import Cart from './Cart'; // Import the Cart component
+import { useCart } from './CartContext'; // Import useCart
 
 const navigation = [
   { name: 'HOME', to: '/home', current: false },
@@ -22,11 +25,13 @@ function classNames(...classes) {
 
 export default function Navbar() {
   const location = useLocation();
+  const { cart } = useCart(); // Get cart from useCart
+  const [isCartOpen, setIsCartOpen] = useState(false); // State for toggling the cart modal
+
   const [userFirstName, setUserFirstName] = useState('');
   const [userLastName, setUserLastName] = useState('');
   const [userEmail, setUserEmail] = useState('');
 
-  // Fetch user information (first name) on component mount
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
@@ -52,13 +57,13 @@ export default function Navbar() {
     try {
       await signOut(auth);
       toast.success('Successfully signed out');
-      // Redirect to login page after sign out
-      window.location.href = '/login'; // Alternatively, use React Router's history to navigate
+      window.location.href = '/login';
     } catch (error) {
       console.error('Error signing out:', error.message);
       toast.error(error.message);
     }
   };
+
   const getInitial = (name) => {
     if (!name) return '';
     return name.charAt(0).toUpperCase();
@@ -71,8 +76,7 @@ export default function Navbar() {
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
             <div className="relative flex h-16 items-center justify-between">
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-                {/* Mobile menu button */}
-                <DisclosureButton className="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-nav-text hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                <Disclosure.Button className="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-nav-text hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                   <span className="absolute -inset-0.5" />
                   <span className="sr-only">Open main menu</span>
                   {open ? (
@@ -80,7 +84,7 @@ export default function Navbar() {
                   ) : (
                     <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
                   )}
-                </DisclosureButton>
+                </Disclosure.Button>
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex flex-shrink-0 items-center">
@@ -107,25 +111,28 @@ export default function Navbar() {
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                 <button
                   type="button"
+                  onClick={() => setIsCartOpen(true)} // Open cart modal
                   className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                 >
                   <span className="absolute -inset-1.5" />
                   <span className="sr-only">View notifications</span>
                   <ShoppingCartIcon className="h-6 w-6" aria-hidden="true" />
+                  {cart.length > 0 && (
+                    <span className="absolute top-0 right-0 block h-4 w-4 rounded-full bg-red-600 text-white text-xs leading-tight text-center">
+                      {cart.length}
+                    </span>
+                  )}
                 </button>
 
-                {/* Profile dropdown */}
                 <Menu as="div" className="relative ml-3">
                   <div>
-                   
                     <MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                  <span className="absolute -inset-1.5" />
-                  <span className="sr-only">Open user menu</span>
-                  
-                  <div className="flex items-center justify-center w-8 h-8 bg-purple-500 text-white font-xl font-bold rounded-full">
-                     {getInitial(userFirstName)}
-                 </div>
-                </MenuButton>
+                      <span className="absolute -inset-1.5" />
+                      <span className="sr-only">Open user menu</span>
+                      <div className="flex items-center justify-center w-8 h-8 bg-purple-500 text-white font-xl font-bold rounded-full">
+                        {getInitial(userFirstName)}
+                      </div>
+                    </MenuButton>
                   </div>
                   <MenuItems
                     transition
@@ -146,21 +153,25 @@ export default function Navbar() {
                               alt="User avatar"
                             />
                           </div>
-                            <div className="ml-2 mt-2 text-xl font-medium text-gray-900 mx-auto  ">{userFirstName} {userLastName}</div>
-                            <div className="ml-2 mt-2 text-sm font-small text-gray-900 mx-auto  ">{userEmail}</div>
+                          <div className="ml-2 mt-2 text-xl font-medium text-gray-900 mx-auto  ">
+                            {userFirstName} {userLastName}
+                          </div>
+                          <div className="ml-2 mt-2 text-sm font-small text-gray-900 mx-auto  ">
+                            {userEmail}
+                          </div>
                         </div>
                       )}
                     </MenuItem>
                     <MenuItem>
                       {({ active }) => (
-                        <button type="button"
+                        <button
+                          type="button"
                           onClick={handleSignOut}
                           className={classNames(
                             active ? 'bg-gray-100' : '',
                             'block px-4 py-2 text-sm text-white w-fit text-left btn-custom-color relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white  focus:ring-offset-2 focus:ring-offset-gray-800 mx-auto my-5'
                           )}
                         >
-                  
                           Sign out
                         </button>
                       )}
@@ -171,10 +182,10 @@ export default function Navbar() {
             </div>
           </div>
 
-          <DisclosurePanel className="sm:hidden">
+          <Disclosure.Panel className="sm:hidden">
             <div className="space-y-1 px-2 pb-3 pt-2">
               {navigation.map((item) => (
-                <DisclosureButton
+                <Disclosure.Button
                   key={item.name}
                   as={Link}
                   to={item.to}
@@ -185,10 +196,12 @@ export default function Navbar() {
                   aria-current={item.current ? 'page' : undefined}
                 >
                   {item.name}
-                </DisclosureButton>
+                </Disclosure.Button>
               ))}
             </div>
-          </DisclosurePanel>
+          </Disclosure.Panel>
+
+          <Cart isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} /> {/* Render the Cart component */}
         </>
       )}
     </Disclosure>

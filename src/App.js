@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { auth } from "./component/Firebase";
+import { CartProvider } from './component/CartContext';
 import './App.css';
 import About from './component/About';
 import Home from './component/Home';
@@ -15,6 +16,7 @@ function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null); 
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setUser(user);
@@ -23,14 +25,15 @@ function App() {
     (error) => {
       setError(error); // Handle error during authentication
       setLoading(false); // Set loading to false on error
-    }
-  );
+    });
+
     return () => unsubscribe();
   }, []);
 
   if (loading) {
     return <Loading></Loading>; // Placeholder for loading state
   }
+
   if (error) {
     // Handle error state, such as showing an error message or redirecting to an error page
     return <div><Error></Error></div>;
@@ -38,20 +41,23 @@ function App() {
 
   return (
     <div className="App">
-      <Router>
-        <Routes>
-          <Route
-            path="/"
-            element={user ? <Navigate to="/home" /> : <Navigate to="/login" />}
-          />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<SignUp />} />
-          <Route path="/home" element={user ? <Home /> : <Navigate to="/login" />} />
-          <Route path="/about" element={user ? <About /> : <Navigate to="/login" />} />
-          <Route path="/contact" element={user ? <Contact /> : <Navigate to="/login" />} />
-          <Route path="/product" element={user ? <Product /> : <Navigate to="/login" />} />
-        </Routes>
-      </Router>
+      <CartProvider>
+        <Router>
+          <Routes>
+            <Route
+              path="/"
+              element={user ? <Navigate to="/home" /> : <Navigate to="/login" />}
+            />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<SignUp />} />
+            <Route path="/home" element={user ? <Home /> : <Navigate to="/login" />} />
+            <Route path="/about" element={user ? <About /> : <Navigate to="/login" />} />
+            <Route path="/contact" element={user ? <Contact /> : <Navigate to="/login" />} />
+            <Route path="/product" element={user ? <Product /> : <Navigate to="/login" />} />
+            <Route path="/product/:id" element={user ? <Product /> : <Navigate to="/login" />} />
+          </Routes>
+        </Router>
+      </CartProvider>
     </div>
   );
 }
