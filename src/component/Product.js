@@ -6,6 +6,7 @@ import { useCart } from './CartContext'; // Import the Cart Context
 import { Link } from 'react-router-dom'; // Import Link from react-router-dom for routing
 import { ShoppingCartIcon } from '@heroicons/react/24/outline'; // Import cart icon from Heroicons
 import ProductPopup from './ProductPopup'; // Import ProductPopup component
+import { toast } from 'react-toastify';
 
 const Product = () => {
   const { dispatch } = useCart();
@@ -13,6 +14,7 @@ const Product = () => {
 
   const handleAddToCart = (product) => {
     dispatch({ type: 'ADD_TO_CART', payload: product });
+    toast.success('One Item added into the Cart .. ')
   };
 
   const openPopup = (product) => {

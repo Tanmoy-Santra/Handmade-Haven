@@ -1,12 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useCart } from './CartContext';
-import { Link } from 'react-router-dom'; // Import Link from react-router-dom for routing
+import ProductPopup from './ProductPopup'; // Import ProductPopup component
 
 const Cart = ({ isOpen, onClose }) => {
   const { cart, dispatch } = useCart();
+  const [selectedProduct, setSelectedProduct] = useState(null); // State for the selected product
 
   const handleRemoveFromCart = (product) => {
     dispatch({ type: 'REMOVE_FROM_CART', payload: product });
+  };
+
+  const handleShopNow = (product) => {
+    setSelectedProduct(product);
+  };
+
+  const handleClosePopup = () => {
+    setSelectedProduct(null);
   };
 
   if (!isOpen) {
@@ -40,12 +49,12 @@ const Cart = ({ isOpen, onClose }) => {
                   </div>
                 </div>
                 <div className="flex mt-2 sm:mt-0">
-                  <Link 
-                    to="/product" 
+                  <button 
+                    onClick={() => handleShopNow(product)} 
                     className="bg-purple-500 text-white p-2 rounded-lg mr-2"
                   >
                     Shop Now
-                  </Link>
+                  </button>
                   <button 
                     onClick={() => handleRemoveFromCart(product)} 
                     className="bg-red-500 text-white p-2 rounded-lg"
@@ -58,6 +67,12 @@ const Cart = ({ isOpen, onClose }) => {
           </div>
         )}
       </div>
+      {selectedProduct && (
+        <ProductPopup
+          product={selectedProduct}
+          onClose={handleClosePopup}
+        />
+      )}
     </div>
   );
 };

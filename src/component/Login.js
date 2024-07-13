@@ -4,7 +4,8 @@ import { auth } from "./Firebase";
 import { useNavigate } from 'react-router-dom';
 import SignInWithGoogle from "./SigninWithgoogle";
 import { Link } from "react-router-dom";
-import './login.css';
+import { toast } from "react-toastify";
+
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -17,11 +18,11 @@ const Login = () => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       console.log("User logged in Successfully", userCredential.user);
-      alert("logged in Successfully..")
+      toast.success("logged in Successfully..",{position:"top-center"})
       navigate("/home");
     } catch (error) {
       console.error("Error logging in:", error.message);
-      alert("Failed to login !!")
+      toast.error("Failed to login !!",{position:"top-center"})
     }
   };
 

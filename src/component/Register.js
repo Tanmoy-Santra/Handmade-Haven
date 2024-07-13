@@ -4,7 +4,7 @@ import { auth, db } from "./Firebase";
 import { setDoc, doc } from "firebase/firestore";
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import './login.css'; // Ensure correct CSS import if needed
+
 
 const Register = () => {
   const [email, setEmail] = useState("");
