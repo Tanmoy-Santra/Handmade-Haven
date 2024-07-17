@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { auth } from "./component/Firebase";
 import { CartProvider } from './component/CartContext';
 import './App.css';
-import About from './component/About';
+
 import Home from './component/Home';
-import Contact from './component/Contact';
+
 import Product from './component/Product';
 import Login from "./component/Login";
 import SignUp from "./component/Register";
@@ -52,10 +52,8 @@ function App() {
             />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<SignUp />} />
-            <Route path="/home" element={user ? <Home /> : <Navigate to="/login" />} />
+            <Route path="/home" element={user ? <Home /> : <Navigate to="/login" />} />        
             
-            {/* <Route path="/about" element={user ? <About /> : <Navigate to="/login" />} /> */}
-            {/* <Route path="/contact" element={user ? <Contact /> : <Navigate to="/login" />} /> */}
             <Route path="/product" element={user ? <Product /> : <Navigate to="/login" />} />
             <Route path="/product/:id" element={user ? <Product /> : <Navigate to="/login" />} />
           </Routes>

@@ -14,8 +14,7 @@ import { useCart } from './CartContext'; // Import useCart
 
 const navigation = [
   { name: 'HOME', to: '/home', current: false },
-  // { name: 'ABOUT', to: '/about', current: false },
-  // { name: 'CONTACT', to: '/contact', current: false },
+ 
   { name: 'PRODUCT', to: '/product', current: false },
 ];
 
