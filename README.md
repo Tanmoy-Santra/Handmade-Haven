@@ -23,7 +23,7 @@
 
 # Tools 
 
-![React Logo](https://reactjs.org/logo-og.png)
+<img src="https://reactjs.org/logo-og.png" alt="React Logo" width="100"/>
 
 
  
