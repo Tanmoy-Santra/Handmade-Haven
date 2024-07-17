@@ -5,6 +5,9 @@ import 'jspdf-autotable';
 import emailjs from 'emailjs-com'; // Import emailjs-com library
 import logoIcon from './Assets/logo2.png';
 import { toast } from 'react-toastify';
+import { db, storage } from './Firebase'; // Import Firebase Firestore and Storage
+import { collection, addDoc } from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 const BillPopup = ({ product, quantity, totalPrice, user, onClose }) => {
   const [showPaymentSection, setShowPaymentSection] = useState(false);
@@ -59,29 +62,65 @@ const BillPopup = ({ product, quantity, totalPrice, user, onClose }) => {
   };
 
   // Handle confirm order button click
-  const handleConfirmOrder = () => {
+  const handleConfirmOrder = async () => {
     if (validateFields()) {
-      sendEmail(); // Send email when order is confirmed
-      toast.success('Order confirmed!', { position: "top-center" });
-      downloadBill();
-      onClose();
+      try {
+        const imageUrl = await uploadImageToStorage(product.image);
+        await saveOrderToFirestore(imageUrl);
+        sendEmail(); // Send email when order is confirmed
+        toast.success('Order confirmed!', { position: "top-center" });
+        downloadBill();
+        onClose();
+      } catch (error) {
+        console.error('Error saving order:', error);
+        toast.error('Failed to confirm order. Please try again.', { position: "top-center" });
+      }
     } else {
       toast.error('Please fill in all required fields correctly.', { position: "top-center" });
     }
   };
 
+  // Function to upload image to Firebase Storage
+  const uploadImageToStorage = async (imageUrl) => {
+    const response = await fetch(imageUrl);
+    const blob = await response.blob();
+    const storageRef = ref(storage, `images/${product.product_id}`);
+    await uploadBytes(storageRef, blob);
+    return getDownloadURL(storageRef);
+  };
+
+  // Function to save order details to Firestore
+  const saveOrderToFirestore = async (imageUrl) => {
+    const ordersCollection = collection(db, 'Orders');
+    const orderData = {
+      product_id: product.product_id,
+      product_name: product.product_name,
+      product_image: imageUrl, // Use the image URL from storage
+      quantity,
+      total_price: totalPrice,
+      user_name: user.name,
+      user_email: user.email,
+      mobile_no: mobileNo,
+      location_details: locationDetails,
+      payment_method: showPaymentSection ? 'Online' : 'Manual',
+      transaction_id: showPaymentSection && transactionId ? transactionId : 'NA',
+      order_date: new Date().toLocaleString(),
+    };
+
+    await addDoc(ordersCollection, orderData);
+  };
+
   // Function to send email using emailJS
   const sendEmail = () => {
     // Configure emailJS parameters (replace with your own IDs)
-    const SERVICE_ID = 'service_zx7hwr1';
-    const TEMPLATE_ID = 'template_hhtn7vr';
-    const USER_ID = 'yiunc3hxhTpTbWZ1q';
+    const SERVICE_ID = process.env.REACT_APP_SERVICE_ID;
+    const TEMPLATE_ID = process.env.REACT_APP_TEMPLATE_ID;
+    const USER_ID = process.env.REACT_APP_USER_ID;
 
     // Prepare template parameters
-
     const currentDate = new Date().toLocaleString();
     const templateParams = {
-      currentDate : currentDate,
+      currentDate: currentDate,
       user_name: user.name,
       user_email: user.email, // Replace with your recipient email address
       message: `
@@ -89,6 +128,7 @@ const BillPopup = ({ product, quantity, totalPrice, user, onClose }) => {
           --------------------------------- 
           Product ID : ${product.product_id} 
           Product Name : ${product.product_name}
+          Product Image: ${product.image}
           Total Quantity : ${quantity} 
           Total Price : ${totalPrice.toFixed(2)} 
           Customer Name : ${user.name}

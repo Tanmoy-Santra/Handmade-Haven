@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Disclosure, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
-import { Bars3Icon, ShoppingCartIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { Bars3Icon, ShoppingCartIcon, XMarkIcon ,CogIcon,ArrowLeftOnRectangleIcon} from '@heroicons/react/24/outline';
 import { Link, useLocation } from 'react-router-dom';
 import logo from './Assets/logo2.png';
 import { auth, db } from './Firebase';
@@ -14,8 +14,8 @@ import { useCart } from './CartContext'; // Import useCart
 
 const navigation = [
   { name: 'HOME', to: '/home', current: false },
-  { name: 'ABOUT', to: '/about', current: false },
-  { name: 'CONTACT', to: '/contact', current: false },
+  // { name: 'ABOUT', to: '/about', current: false },
+  // { name: 'CONTACT', to: '/contact', current: false },
   { name: 'PRODUCT', to: '/product', current: false },
 ];
 
@@ -169,9 +169,40 @@ export default function Navbar() {
                           onClick={handleSignOut}
                           className={classNames(
                             active ? 'bg-gray-100' : '',
-                            'block px-4 py-2 text-sm text-white w-fit text-left btn-custom-color relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white  focus:ring-offset-2 focus:ring-offset-gray-800 mx-auto my-5'
+                            'block px-4 py-2 text-sm text-white w-fit text-left btn-custom-color relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white  focus:ring-offset-2 focus:ring-offset-gray-800 mx-auto my-5 flex items-center px-4 py-2 text-sm text-gray-700 w-fit'
                           )}
                         >
+                         <ShoppingCartIcon className="h-5 w-5 mr-2" aria-hidden="true" />
+                          Orders
+                        </button>
+                      )}
+                    </MenuItem>
+                    <MenuItem>
+                      {({ active }) => (
+                        <button
+                          type="button"
+                          onClick={handleSignOut}
+                          className={classNames(
+                            active ? 'bg-gray-100' : '',
+                            'block px-4 py-2 text-sm text-white w-fit text-left btn-custom-color relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white  focus:ring-offset-2 focus:ring-offset-gray-800 mx-auto my-5 flex items-center px-4 py-2 text-sm text-gray-700 w-fit'
+                          )}
+                        >
+                        <CogIcon className="h-5 w-5 mr-2" aria-hidden="true" />
+                          Settings
+                        </button>
+                      )}
+                    </MenuItem>
+                    <MenuItem>
+                      {({ active }) => (
+                        <button
+                          type="button"
+                          onClick={handleSignOut}
+                          className={classNames(
+                            active ? 'bg-gray-100' : '',
+                            'block px-4 py-2 text-sm text-white w-fit text-left btn-custom-color relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white  focus:ring-offset-2 focus:ring-offset-gray-800 mx-auto my-5 flex items-center px-4 py-2 text-sm text-gray-700 w-fit'
+                          )}
+                        >
+                         <ArrowLeftOnRectangleIcon className="h-5 w-5 mr-2" aria-hidden="true" />
                           Sign out
                         </button>
                       )}

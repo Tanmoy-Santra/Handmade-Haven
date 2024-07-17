@@ -48,13 +48,14 @@ function App() {
           <Routes>
             <Route
               path="/"
-              element={user ? <Navigate to="/home" /> : <Navigate to="/login" />}
+              element={user ? <Navigate to="/product" /> : <Navigate to="/login" />}
             />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<SignUp />} />
             <Route path="/home" element={user ? <Home /> : <Navigate to="/login" />} />
-            <Route path="/about" element={user ? <About /> : <Navigate to="/login" />} />
-            <Route path="/contact" element={user ? <Contact /> : <Navigate to="/login" />} />
+            
+            {/* <Route path="/about" element={user ? <About /> : <Navigate to="/login" />} /> */}
+            {/* <Route path="/contact" element={user ? <Contact /> : <Navigate to="/login" />} /> */}
             <Route path="/product" element={user ? <Product /> : <Navigate to="/login" />} />
             <Route path="/product/:id" element={user ? <Product /> : <Navigate to="/login" />} />
           </Routes>
