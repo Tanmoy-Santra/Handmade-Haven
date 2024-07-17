@@ -1,3 +1,39 @@
+<div align="center">
+  <h1><strong><a href="https://handmadehaven-4a693.web.app/">Handmade-Haven</a></strong></h1>
+</div>
+
+- A Handmade Craft Shopping Website .
+- User friendly interface .
+- Include Login Authentication .
+- Include OTP varification by email .
+- With organized Data storage system .
+- Providing online payment feature .
+- Including Billing Process .
+
+# [Demo ](https://handmadehaven-4a693.web.app/)
+
+
+![WhatsApp Image 2024-07-17 at 22 47 59_20fcfaae](https://github.com/user-attachments/assets/bb113d35-103c-47a7-b9e8-592def8c1ad2)
+
+![WhatsApp Image 2024-07-17 at 22 45 22_0f9c3025](https://github.com/user-attachments/assets/238bbd76-920e-42cf-b362-ada1841d9b8a)
+
+![WhatsApp Image 2024-07-17 at 22 46 10_1c54aeb3](https://github.com/user-attachments/assets/f666652b-f883-4e61-860e-3eb377c3ad88)
+
+![WhatsApp Image 2024-07-17 at 22 46 40_659f4edf](https://github.com/user-attachments/assets/cd08a346-5aae-48bb-b9d5-7d71acf2afc3)
+
+# Tools 
+<p>
+<img alt="React" src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" height="25px"/>
+<img alt="Tailwidcss" src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" height="25px"/>
+<img alt="Nodejs" src="https://img.shields.io/badge/-Nodejs-43853d?style=flat-square&logo=Node.js&logoColor=white"  height="25px"/>
+<img alt="Express" src="https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB" height="25px"/>
+<img alt="npm" src="https://img.shields.io/badge/NPM-%23000000.svg?style=for-the-badge&logo=npm&logoColor=white" height="25px"/>
+<img alt="git" src="https://img.shields.io/badge/-Git-F05032?style=flat-square&logo=git&logoColor=white" height="25px"/>
+<img alt="github actions" src="https://img.shields.io/badge/-Github_Actions-2088FF?style=flat-square&logo=github-actions&logoColor=white" height="25px"/>
+<img alt="Firebase" src="https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=white" height="25px"/>
+</p>
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
