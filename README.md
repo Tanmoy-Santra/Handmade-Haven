@@ -1,3 +1,34 @@
+[# Handmade-Haven](https://handmadehaven-4a693.web.app/)
+
+- A Handmade Craft Shopping Website .
+- User friendly interface .
+- Include Login Authentication .
+- Include OTP varification by email .
+- With organized Data storage system .
+- Providing online payment feature .
+- Including Billing Process .
+
+[# Demo ](https://handmadehaven-4a693.web.app/)
+
+
+![WhatsApp Image 2024-07-17 at 22 47 59_20fcfaae](https://github.com/user-attachments/assets/bb113d35-103c-47a7-b9e8-592def8c1ad2)
+
+![WhatsApp Image 2024-07-17 at 22 45 22_0f9c3025](https://github.com/user-attachments/assets/238bbd76-920e-42cf-b362-ada1841d9b8a)
+
+![WhatsApp Image 2024-07-17 at 22 46 10_1c54aeb3](https://github.com/user-attachments/assets/f666652b-f883-4e61-860e-3eb377c3ad88)
+
+![WhatsApp Image 2024-07-17 at 22 46 40_659f4edf](https://github.com/user-attachments/assets/cd08a346-5aae-48bb-b9d5-7d71acf2afc3)
+
+
+ 
+
+
+
+
+
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
