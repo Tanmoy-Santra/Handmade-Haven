@@ -22,7 +22,7 @@
 ![WhatsApp Image 2024-07-17 at 22 46 40_659f4edf](https://github.com/user-attachments/assets/cd08a346-5aae-48bb-b9d5-7d71acf2afc3)
 
 # Tools 
-
+<p>
 <img alt="React" src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" height="25px"/>
 <img alt="Tailwidcss" src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" height="25px"/>
 <img alt="Nodejs" src="https://img.shields.io/badge/-Nodejs-43853d?style=flat-square&logo=Node.js&logoColor=white"  height="25px"/>
@@ -31,7 +31,7 @@
 <img alt="git" src="https://img.shields.io/badge/-Git-F05032?style=flat-square&logo=git&logoColor=white" height="25px"/>
 <img alt="github actions" src="https://img.shields.io/badge/-Github_Actions-2088FF?style=flat-square&logo=github-actions&logoColor=white" height="25px"/>
 <img alt="Firebase" src="https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=white" height="25px"/>
-
+</p>
 
 
 # Getting Started with Create React App
