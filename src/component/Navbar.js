@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Disclosure, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
-import { Bars3Icon, ShoppingCartIcon, XMarkIcon ,CogIcon,ArrowLeftOnRectangleIcon,HomeIcon,ShoppingBagIcon} from '@heroicons/react/24/outline';
+import { Bars3Icon, ShoppingCartIcon, XMarkIcon ,ArrowLeftOnRectangleIcon,HomeIcon,ShoppingBagIcon} from '@heroicons/react/24/outline';
 import { Link, useLocation } from 'react-router-dom';
 import logo from './Assets/logo2.png';
 import { auth, db } from './Firebase';
