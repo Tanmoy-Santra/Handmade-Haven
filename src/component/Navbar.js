@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Disclosure, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
-import { Bars3Icon, ShoppingCartIcon, XMarkIcon ,CogIcon,ArrowLeftOnRectangleIcon} from '@heroicons/react/24/outline';
+import { Bars3Icon, ShoppingCartIcon, XMarkIcon ,CogIcon,ArrowLeftOnRectangleIcon,HomeIcon,ShoppingBagIcon} from '@heroicons/react/24/outline';
 import { Link, useLocation } from 'react-router-dom';
 import logo from './Assets/logo2.png';
 import { auth, db } from './Firebase';
@@ -13,9 +13,8 @@ import Cart from './Cart'; // Import the Cart component
 import { useCart } from './CartContext'; // Import useCart
 
 const navigation = [
-  { name: 'HOME', to: '/home', current: false },
- 
-  { name: 'PRODUCT', to: '/product', current: false },
+  { name: 'HOME', to: '/home', current: false , icon:HomeIcon}, 
+  { name: 'PRODUCT', to: '/product', current: false,icon: ShoppingBagIcon },
 ];
 
 function classNames(...classes) {
@@ -87,7 +86,7 @@ export default function Navbar() {
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex flex-shrink-0 items-center">
-                  <img className="h-8 w-auto" src={logo} alt="Your Company" />
+                  <img className="h-10 w-auto" src={logo} alt="Your Company" />
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">
@@ -101,6 +100,7 @@ export default function Navbar() {
                         )}
                         aria-current={item.current ? 'page' : undefined}
                       >
+                         <item.icon className="h-4 w-4 mr-1 pb-1 inline" aria-hidden="true" />
                         {item.name}
                       </Link>
                     ))}
@@ -161,7 +161,7 @@ export default function Navbar() {
                         </div>
                       )}
                     </MenuItem>
-                    <MenuItem>
+                    {/* <MenuItem>
                       {({ active }) => (
                         <button
                           type="button"
@@ -175,8 +175,8 @@ export default function Navbar() {
                           Orders
                         </button>
                       )}
-                    </MenuItem>
-                    <MenuItem>
+                    </MenuItem> */}
+                    {/* <MenuItem>
                       {({ active }) => (
                         <button
                           type="button"
@@ -190,7 +190,7 @@ export default function Navbar() {
                           Settings
                         </button>
                       )}
-                    </MenuItem>
+                    </MenuItem> */}
                     <MenuItem>
                       {({ active }) => (
                         <button

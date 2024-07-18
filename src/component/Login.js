@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import SignInWithGoogle from "./SigninWithgoogle";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-
+import logo from './Assets/loginlogo.png'
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -27,8 +27,13 @@ const Login = () => {
   };
 
   return (
+    
     <div className="flex items-center justify-center min-h-screen bg-gray-100 bg-color-login">
+     
       <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-md w-full max-w-sm">
+      
+                  <img className="h-30 w-auto" src={logo}  alt="Your Company" />
+   
         <h3 className="text-2xl font-bold mb-4">Login</h3>
 
         <div className="mb-4">

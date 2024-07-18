@@ -8,6 +8,7 @@ import { ShoppingCartIcon } from '@heroicons/react/24/outline'; // Import cart i
 import ProductPopup from './ProductPopup'; // Import ProductPopup component
 import { toast } from 'react-toastify';
 
+
 const Product = () => {
   const { dispatch } = useCart();
   const [popupProduct, setPopupProduct] = useState(null);
@@ -36,7 +37,7 @@ const Product = () => {
               <p className="text-xl font-bold text-white">{product.product_name}</p>
               <p className="text-xs text-gray-50">{product.description}</p>
               <div className="flex justify-between items-center mt-4">
-                <p className="text-white">${product.new_price.toFixed(2)}</p>
+                <p className="text-white">Rs.{product.new_price.toFixed(2)}</p>
                 <button
                   type="button"
                   className="w-10 h-10 text-base text-white bg-pink-500 rounded-full flex items-center justify-center hover:bg-pink-700 addto-cart-color mr-2"

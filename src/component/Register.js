@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import emailjs from 'emailjs-com';
 import OtpPopup from './OtpPopup'; // Create this component
 import { toast } from "react-toastify";
-
+import logo from './Assets/loginlogo.png'
 const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -92,7 +92,9 @@ const Register = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 bg-color-login">
+    
       <form onSubmit={handleRegister} className="bg-white p-6 rounded shadow-md w-full max-w-sm">
+      <img className="h-30 w-auto" src={logo}  alt="Your Company" />
         <h3 className="text-2xl font-bold mb-4">Sign Up</h3>
 
         <div className="mb-4">

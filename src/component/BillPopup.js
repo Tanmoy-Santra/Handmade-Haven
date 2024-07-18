@@ -3,12 +3,14 @@ import QRCode from 'qrcode.react';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import emailjs from 'emailjs-com'; // Import emailjs-com library
-import logoIcon from './Assets/logo2.png';
+import logoIcon from './Assets/bg-white.png';
 import { toast } from 'react-toastify';
 import { db, storage } from './Firebase'; // Import Firebase Firestore and Storage
 import { collection, addDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-
+import phonePay from './Assets/phonepe-icon.webp'
+import googlePay from './Assets/google pay.png'
+import upi from './Assets/upi.png'
 const BillPopup = ({ product, quantity, totalPrice, user, onClose }) => {
   const [showPaymentSection, setShowPaymentSection] = useState(false);
   const [transactionId, setTransactionId] = useState('');
@@ -29,7 +31,7 @@ const BillPopup = ({ product, quantity, totalPrice, user, onClose }) => {
   const validateFields = () => {
     const regexMobile = /^[6-9]\d{9}$/;
     const regexLocation = /^[#.0-9a-zA-Z\s,-]+$/;
-    const regexTransaction = /^[A-Z0-9]{11}((\w|[:\.-]){0,30}[A-Z0-9])?$/;
+    const regexTransaction = /^[A-Z0-9]{11}((\w|[:-]){0,30}[A-Z0-9])?$/;
     let isValid = true;
 
     if (!regexLocation.test(locationDetails)) {
@@ -219,7 +221,7 @@ const BillPopup = ({ product, quantity, totalPrice, user, onClose }) => {
                 <p className="text-sm">Product ID: {product.product_id}</p>
                 <p className="text-sm">Product Name: {product.product_name}</p>
                 <p className="text-sm">Total Quantity: {quantity}</p>
-                <p className="text-sm">Total Price: ${totalPrice.toFixed(2)}</p>
+                <p className="text-sm">Total Price: Rs.{totalPrice.toFixed(2)}</p>
               </div>
             </div>
           </div>
@@ -260,9 +262,9 @@ const BillPopup = ({ product, quantity, totalPrice, user, onClose }) => {
             <h3 className="text-lg font-bold mb-2">Payment Section</h3>
             <QRCode value="payment-info" className="mb-4" />
             <div className="flex justify-between mb-4">
-              <img src="upi-logo.png" alt="UPI" className="h-10" />
-              <img src="phonepe-logo.png" alt="PhonePe" className="h-10" />
-              <img src="googlepay-logo.png" alt="Google Pay" className="h-10" />
+              <img src={upi} alt="UPI" className="h-10" />
+              <img src={phonePay} alt="PhonePe" className="h-6" />
+              <img src={googlePay} alt="Google Pay" className="h-6" />
             </div>
             <input
               type="text"

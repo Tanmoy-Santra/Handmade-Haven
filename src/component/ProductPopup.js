@@ -83,7 +83,7 @@ const ProductPopup = ({ product, onClose }) => {
               <p className="text-sm">{product.description}</p>
             </div>
             <div className="w-1/2 px-4">
-              <p className="text-xl font-bold mb-2">${product.new_price.toFixed(2)}</p>
+              <p className="text-xl font-bold mb-2">Rs.{product.new_price.toFixed(2)}</p>
               <div className="flex items-center mb-4">
                 <button
                   onClick={decreaseQuantity}
@@ -99,7 +99,7 @@ const ProductPopup = ({ product, onClose }) => {
                   +
                 </button>
               </div>
-              <p className="mt-4 text-lg font-bold">Total Price: ${totalPrice.toFixed(2)}</p>
+              <p className="mt-4 text-lg font-bold">Total Price: Rs.{totalPrice.toFixed(2)}</p>
               <button
                 className="mt-4 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-700"
                 onClick={handleBookOrder}
