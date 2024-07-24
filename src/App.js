@@ -5,14 +5,13 @@ import 'react-toastify/dist/ReactToastify.css';
 import { auth } from "./component/Firebase";
 import { CartProvider } from './component/CartContext';
 import './App.css';
-
 import Home from './component/Home';
-
 import Product from './component/Product';
-import Login from "./component/Login";
-import SignUp from "./component/Register";
-import Error from './component/Error';
-import Loading from './component/Loding';
+import Login from './Auth/Login';
+import FillDetails from './Auth/FillDetails';
+import Error from './Error/Error';
+import UniversalLoader from './Loders/UniversalLoader';
+import AdminUseOnly from './component/AdminUseOnly';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -33,7 +32,7 @@ function App() {
   }, []);
 
   if (loading) {
-    return <Loading></Loading>; // Placeholder for loading state
+    return <UniversalLoader></UniversalLoader>; // Placeholder for loading state
   }
 
   if (error) {
@@ -51,9 +50,9 @@ function App() {
               element={user ? <Navigate to="/product" /> : <Navigate to="/login" />}
             />
             <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<SignUp />} />
+            <Route path="/filldetails" element={<FillDetails />} />
             <Route path="/home" element={user ? <Home /> : <Navigate to="/login" />} />        
-            
+            <Route path="/admin-use-only" element={<AdminUseOnly/>} />
             <Route path="/product" element={user ? <Product /> : <Navigate to="/login" />} />
             <Route path="/product/:id" element={user ? <Product /> : <Navigate to="/login" />} />
           </Routes>

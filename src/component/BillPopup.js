@@ -6,12 +6,17 @@ import emailjs from 'emailjs-com'; // Import emailjs-com library
 import logoIcon from './Assets/bg-white.png';
 import { toast } from 'react-toastify';
 import { db, storage } from './Firebase'; // Import Firebase Firestore and Storage
+import { auth} from './Firebase';
 import { collection, addDoc } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import phonePay from './Assets/phonepe-icon.webp'
 import googlePay from './Assets/google pay.png'
 import upi from './Assets/upi.png'
+import LocalLoader from '../Loders/LocalLoader';
+
 const BillPopup = ({ product, quantity, totalPrice, user, onClose }) => {
+  const [loading, setLoading] = useState(false);
   const [showPaymentSection, setShowPaymentSection] = useState(false);
   const [transactionId, setTransactionId] = useState('');
   const [locationDetails, setLocationDetails] = useState('');
@@ -23,6 +28,31 @@ const BillPopup = ({ product, quantity, totalPrice, user, onClose }) => {
   const [transactionDetailsError, setTransactionDetailsError] = useState('');
 
   // Effect to validate fields on input change
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        setLoading(true); // Show loader
+        const user = auth.currentUser;
+        if (user) {
+          const docRef = doc(db, 'Users', user.uid);
+          const docSnap = await getDoc(docRef);
+          if (docSnap.exists()) {
+            setLocationDetails(docSnap.data().address);
+            setMobileNo(docSnap.data().phone);
+          }
+        }
+      } catch (error) {
+        console.log('Error fetching user information !!', error.message);
+        toast.error(`Error fetching user information !!`, { position: 'top-center' });
+      } finally {
+        setLoading(false); // Hide loader
+      }
+    };
+
+    fetchUserInfo();
+  }, []);
+
   useEffect(() => {
     validateFields();
   }, [locationDetails, mobileNo, transactionId, showPaymentSection]);
@@ -66,19 +96,22 @@ const BillPopup = ({ product, quantity, totalPrice, user, onClose }) => {
   // Handle confirm order button click
   const handleConfirmOrder = async () => {
     if (validateFields()) {
+      setLoading(true);
       try {
         const imageUrl = await uploadImageToStorage(product.image);
         await saveOrderToFirestore(imageUrl);
         sendEmail(); // Send email when order is confirmed
-        toast.success('Order confirmed!', { position: "top-center" });
+        toast.success('Order confirmed!', { position: 'top-center' });
         downloadBill();
         onClose();
       } catch (error) {
         console.error('Error saving order:', error);
-        toast.error('Failed to confirm order. Please try again.', { position: "top-center" });
+        toast.error('Failed to confirm order. Please try again.', { position: 'top-center' });
+      } finally {
+        setLoading(false); // Hide loader
       }
     } else {
-      toast.error('Please fill in all required fields correctly.', { position: "top-center" });
+      toast.error('Please fill in all required fields correctly.', { position: 'top-center' });
     }
   };
 
@@ -93,39 +126,50 @@ const BillPopup = ({ product, quantity, totalPrice, user, onClose }) => {
 
   // Function to save order details to Firestore
   const saveOrderToFirestore = async (imageUrl) => {
-    const ordersCollection = collection(db, 'Orders');
-    const orderData = {
-      product_id: product.product_id,
-      product_name: product.product_name,
-      product_image: imageUrl, // Use the image URL from storage
-      quantity,
-      total_price: totalPrice,
-      user_name: user.name,
-      user_email: user.email,
-      mobile_no: mobileNo,
-      location_details: locationDetails,
-      payment_method: showPaymentSection ? 'Online' : 'Manual',
-      transaction_id: showPaymentSection && transactionId ? transactionId : 'NA',
-      order_date: new Date().toLocaleString(),
-    };
+    try {
+      setLoading(true);
+      const ordersCollection = collection(db, 'Orders');
+      const orderData = {
+        product_id: product.product_id,
+        product_name: product.product_name,
+        product_image: imageUrl, // Use the image URL from storage
+        quantity,
+        total_price: totalPrice,
+        user_name: user.name,
+        user_email: user.email,
+        phone: mobileNo,
+        location: locationDetails,
+        payment_method: showPaymentSection ? 'Online' : 'Manual',
+        transaction_id: showPaymentSection && transactionId ? transactionId : 'NA',
+        order_date: new Date().toLocaleString(),
+      };
 
-    await addDoc(ordersCollection, orderData);
+      await addDoc(ordersCollection, orderData);
+      console.log('Order saved successfully');
+    } catch (error) {
+      console.error('Error saving order to Firestore:', error);
+      toast.error('Error saving order to Firestore !!', { position: 'top-center' });
+    } finally {
+      setLoading(false); // Hide loader
+    }
   };
 
   // Function to send email using emailJS
-  const sendEmail = () => {
-    // Configure emailJS parameters (replace with your own IDs)
-    const SERVICE_ID = process.env.REACT_APP_SERVICE_ID;
-    const TEMPLATE_ID = process.env.REACT_APP_TEMPLATE_ID;
-    const USER_ID = process.env.REACT_APP_USER_ID;
+  const sendEmail = async () => {
+    setLoading(true);
+    try {
+      // Configure emailJS parameters (replace with your own IDs)
+      const SERVICE_ID = process.env.REACT_APP_SERVICE_ID;
+      const TEMPLATE_ID = process.env.REACT_APP_TEMPLATE_ID;
+      const USER_ID = process.env.REACT_APP_USER_ID;
 
-    // Prepare template parameters
-    const currentDate = new Date().toLocaleString();
-    const templateParams = {
-      currentDate: currentDate,
-      user_name: user.name,
-      user_email: user.email, // Replace with your recipient email address
-      message: `
+      // Prepare template parameters
+      const currentDate = new Date().toLocaleString();
+      const templateParams = {
+        currentDate: currentDate,
+        user_name: user.name,
+        user_email: user.email, // Replace with your recipient email address
+        message: `
           Order Details 
           --------------------------------- 
           Product ID : ${product.product_id} 
@@ -140,70 +184,92 @@ const BillPopup = ({ product, quantity, totalPrice, user, onClose }) => {
           Payment Method : ${showPaymentSection ? 'Online' : 'Manual'}
           Transaction ID : ${showPaymentSection && transactionId ? transactionId : 'NA'}
           Order Date : ${currentDate}
-      `
-    };
+        `
+      };
 
-    // Send email
-    emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, USER_ID)
-      .then((response) => {
-        console.log('Email sent successfully:', response);
-      })
-      .catch((error) => {
-        console.error('Email send error:', error);
-      });
+      // Send email
+      const response = await emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, USER_ID);
+      console.log('Email sent successfully:', response);
+    } catch (error) {
+      console.error('Email send error:', error);
+      toast.error('Email send error !!', { position: 'top-center' });
+    } finally {
+      setLoading(false); // Hide loader
+    }
   };
 
   // Function to download bill as PDF
   const downloadBill = () => {
-    const doc = new jsPDF();
+    setLoading(true);
+    try {
+      const doc = new jsPDF();
 
-    // Add watermark
-    doc.setFontSize(30);
-    doc.setTextColor(150);
-    doc.text('Handmade Haven', 35, 150, { angle: -45 });
+      // Add watermark
+      doc.setFontSize(30);
+      doc.setTextColor(150);
+      doc.text('Handmade Haven', 35, 150, { angle: -45 });
 
-    // Add logo (assuming logoIcon is a base64 string)
-    const logo = logoIcon;
-    doc.addImage(logo, 'PNG', 160, 10, 40, 40);
+      // Add logo (assuming logoIcon is a base64 string)
+      const logo = logoIcon;
+      doc.addImage(logo, 'PNG', 160, 10, 40, 40);
 
-    // Order Summary
-    doc.setFontSize(16);
-    doc.setTextColor(0);
-    doc.text('Order Summary', 20, 60);
+      // Order Summary
+      doc.setFontSize(16);
+      doc.setTextColor(0);
+      doc.text('Order Summary', 20, 60);
 
-    // Add details
-    const currentDate = new Date().toLocaleString();
-    const details = [
-      { key: 'Product ID', value: product.product_id },
-      { key: 'Product Name', value: product.product_name },
-      { key: 'Total Quantity', value: quantity },
-      { key: 'Total Price', value: `$${totalPrice.toFixed(2)}` },
-      { key: 'User', value: user.name },
-      { key: 'Email', value: user.email },
-      { key: 'Order Date', value: currentDate },
-      { key: 'Mobile No.', value: mobileNo },
-      { key: 'Location Details', value: locationDetails },
-    ];
+      // Add details
+      const currentDate = new Date().toLocaleString();
+      const details = [
+        { key: 'Product ID', value: product.product_id },
+        { key: 'Product Name', value: product.product_name },
+        { key: 'Total Quantity', value: quantity },
+        { key: 'Total Price', value: `$${totalPrice.toFixed(2)}` },
+        { key: 'User', value: user.name },
+        { key: 'Email', value: user.email },
+        { key: 'Order Date', value: currentDate },
+        { key: 'Mobile No.', value: mobileNo },
+        { key: 'Location Details', value: locationDetails },
+      ];
 
-    if (showPaymentSection) {
-      details.push({ key: 'Payment Method', value: 'Online' });
-      if (transactionId) {
-        details.push({ key: 'Transaction ID', value: transactionId });
+      if (showPaymentSection) {
+        details.push({ key: 'Payment Method', value: 'Online' });
+        if (transactionId) {
+          details.push({ key: 'Transaction ID', value: transactionId });
+        }
+      } else {
+        details.push({ key: 'Payment Method', value: 'Manual' });
       }
-    } else {
-      details.push({ key: 'Payment Method', value: 'Manual' });
+
+      doc.autoTable({
+        startY: 70,
+        body: details.map((item) => [item.key, item.value]),
+        theme: 'grid',
+        styles: {
+          cellPadding: 3,
+          fontSize: 12,
+          valign: 'middle',
+        },
+        headStyles: {
+          fillColor: [220, 220, 220],
+        },
+      });
+
+      // QR Code
+      const qrCode = document.getElementById('qrCode');
+      if (qrCode) {
+        const qrImageData = qrCode.toDataURL('image/png');
+        doc.addImage(qrImageData, 'PNG', 160, 60, 40, 40);
+      }
+
+      // Save the PDF
+      doc.save('order_summary.pdf');
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      toast.error('Error generating PDF !!', { position: 'top-center' });
+    } finally {
+      setLoading(false); // Hide loader
     }
-
-    doc.autoTable({
-      startY: 70,
-      body: details.map(({ key, value }) => [key, value]),
-      theme: 'grid',
-      headStyles: { fillColor: [255, 255, 255], textColor: [0, 0, 0] },
-      styles: { cellPadding: 1, fontSize: 12, textColor: [0, 0, 0] },
-    });
-
-    // Save PDF
-    doc.save(`${product.product_name}.pdf`);
   };
 
   return (
@@ -221,7 +287,7 @@ const BillPopup = ({ product, quantity, totalPrice, user, onClose }) => {
                 <p className="text-sm">Product ID: {product.product_id}</p>
                 <p className="text-sm">Product Name: {product.product_name}</p>
                 <p className="text-sm">Total Quantity: {quantity}</p>
-                <p className="text-sm">Total Price: Rs.{totalPrice.toFixed(2)}</p>
+                <p className="text-sm">Total Price: ₹ {totalPrice.toFixed(2)}</p>
               </div>
             </div>
           </div>
@@ -233,10 +299,10 @@ const BillPopup = ({ product, quantity, totalPrice, user, onClose }) => {
           <label className="block text-sm font-bold mb-2">Your current location details:</label>
           <textarea
             rows="3"
-            value={locationDetails}
-            onChange={(e) => setLocationDetails(e.target.value)}
             className={`w-full px-3 py-2 border rounded-lg mb-4 ${locationDetailsError ? 'border-red-500' : ''}`}
             placeholder="Enter your current location details"
+            value={locationDetails}
+            onChange={(e) => setLocationDetails(e.target.value)}
           />
           {locationDetailsError && <p className="text-red-500 text-xs">{locationDetailsError}</p>}
         </div>
@@ -244,15 +310,15 @@ const BillPopup = ({ product, quantity, totalPrice, user, onClose }) => {
           <label className="block text-sm font-bold mb-2">Mobile No:</label>
           <input
             type="text"
-            value={mobileNo}
-            onChange={(e) => setMobileNo(e.target.value)}
             className={`w-full px-3 py-2 border rounded-lg mb-4 ${mobileNoError ? 'border-red-500' : ''}`}
             placeholder="Enter your mobile number"
+            value={mobileNo}
+            onChange={(e) => setMobileNo(e.target.value)}
           />
           {mobileNoError && <p className="text-red-500 text-xs">{mobileNoError}</p>}
         </div>
         <button
-          className={`bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 ${showPaymentSection ? 'hidden' : ''}`}
+          className={`bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 btn-custom-color ${showPaymentSection ? 'hidden' : ''}`}
           onClick={handleMakePayment}
         >
           Make Payment
@@ -274,20 +340,25 @@ const BillPopup = ({ product, quantity, totalPrice, user, onClose }) => {
               className="w-full px-3 py-2 border rounded-lg mb-4"
             />
             {transactionDetailsError && <p className="text-red-500 text-xs">{transactionDetailsError}</p>}
-            <button className="mt-2 bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-700" onClick={() => setShowPaymentSection(false)}>
+            <button className="mt-2 bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-700 btn-custom-color" onClick={() => setShowPaymentSection(false)}>
               Close Payment
             </button>
           </div>
         )}
         <button
           disabled={!locationDetails || !mobileNo || (showPaymentSection && !transactionId)}
-          className={`mt-4 mx-2 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-700 `}
+          className={`mt-4 mx-2 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-700 btn-custom-color`}
           onClick={handleConfirmOrder}
         >
           Confirm Order
         </button>
-      </div>
-    </div>
+      </div>{loading && (
+  <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-60">
+    <LocalLoader />
+  </div>
+)}
+</div>  
+   
   );
 };
 

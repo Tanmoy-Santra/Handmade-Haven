@@ -1,22 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from './Navbar';
 import Footer from './Footer';
-import productDetails from './ProductDetails';
 import { useCart } from './CartContext'; // Import the Cart Context
 import { Link } from 'react-router-dom'; // Import Link from react-router-dom for routing
 import { ShoppingCartIcon } from '@heroicons/react/24/outline'; // Import cart icon from Heroicons
 import ProductPopup from './ProductPopup'; // Import ProductPopup component
 import { toast } from 'react-toastify';
-import NewProduct from './NewProduct';
+import { db } from './Firebase'; // Import Firestore
+import { collection, getDocs } from 'firebase/firestore'; // Import collection and getDocs
 
-
-const Product = () => {
+const NewProduct = () => {
   const { dispatch } = useCart();
   const [popupProduct, setPopupProduct] = useState(null);
+  const [products, setProducts] = useState([]);
+  
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, 'Products'));
+        const fetchedProducts = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setProducts(fetchedProducts);
+      } catch (error) {
+        console.error('Error fetching products:', error.message);
+      }
+    };
+    
+    fetchProducts();
+  }, []);
 
   const handleAddToCart = (product) => {
     dispatch({ type: 'ADD_TO_CART', payload: product });
-    toast.success('One Item added into the Cart .. ')
+    toast.success('One Item added into the Cart .. ');
   };
 
   const openPopup = (product) => {
@@ -28,11 +45,10 @@ const Product = () => {
   };
 
   return (
-    <div>
-      <Navbar />
+    <div>     
       <div className="flex flex-wrap justify-center my-20">
-        {productDetails.map(product => (
-          <div key={product.product_id} className="w-64 p-2 m-4 bg-white shadow-lg rounded-2xl">
+        {products.map(product => (
+          <div key={product.id} className="w-64 p-2 m-4 bg-white shadow-lg rounded-2xl">
             <img src={product.image} alt={product.product_name} className="w-32 p-4 m-auto h-36" />
             <div className="p-4 m-3 bg-pink-200 rounded-lg bg-color-model">
               <p className="text-xl font-bold text-white">{product.product_name}</p>
@@ -49,7 +65,7 @@ const Product = () => {
               </div>
               <div className="flex justify-center mt-4">
                 <Link
-                  to={`/product/${product.product_id}`} // Ensure this path is correct based on your routing setup
+                  to={`/product/${product.id}`} // Ensure this path is correct based on your routing setup
                   className="w-24 h-10 text-base font-medium text-white bg-blue-500 rounded-full flex items-center justify-center hover:bg-blue-700 btn-custom-color"
                   onClick={() => openPopup(product)} // Open popup on link click
                 >
@@ -60,14 +76,12 @@ const Product = () => {
           </div>
         ))}
       </div>
-      <NewProduct></NewProduct>
-      <Footer />
+    
 
       {/* Render ProductPopup if popupProduct is not null */}
       {popupProduct && <ProductPopup product={popupProduct} onClose={closePopup} />}
-      
     </div>
   );
 };
 
-export default Product;
+export default NewProduct;

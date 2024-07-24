@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from './Assets/logo2.png'
+import logo from '../component/Assets/logo2.png'
 
 const SkeletonLoader = () => {
   return (

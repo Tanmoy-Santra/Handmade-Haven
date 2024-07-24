@@ -1,3 +1,6 @@
+body{
+  background: linear-gradient(to right, #6f409e, #b583da);
+}
 .custom-nav-bg {
   background-color: #5A189A;
 }
@@ -31,10 +34,10 @@
   background-color: #2d0654;  
 }
 .bg-custom-middle {
-  background: linear-gradient(to right, #6f409e, #e0b8fe);
+  background: linear-gradient(to right, #6f409e, #b583da);
 }
 .bg-color-login{
-  background: linear-gradient(to right, #6f409e, #e0b8fe);
+  background: linear-gradient(to right, #6f409e, #b583da);
 }
 .bg-color-login-textarea{
   background-color: #e0b8fe;

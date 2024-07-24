@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import SkeletonLoader from './SkeletonLoader'; // Ensure this path matches where you save SkeletonLoader
+import UniversalLoader from './UniversalLoader'; // Ensure this path matches where you save UniversalLoader
 
 const Loading = () => {
   const [loading, setLoading] = useState(true);
@@ -12,7 +12,7 @@ const Loading = () => {
   return (
     <div>
       {loading ? (
-        <SkeletonLoader />
+        <UniversalLoader />
       ) : (
         <div className="p-4 max-w-xl mx-auto">
           <h1 className="text-2xl font-bold mb-4">Content Loaded</h1>

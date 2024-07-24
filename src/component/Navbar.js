@@ -1,20 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Disclosure, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
-import { Bars3Icon, ShoppingCartIcon, XMarkIcon ,ArrowLeftOnRectangleIcon,HomeIcon,ShoppingBagIcon} from '@heroicons/react/24/outline';
-import { Link, useLocation } from 'react-router-dom';
+import { Bars3Icon, ShoppingCartIcon, XMarkIcon, ArrowLeftOnRectangleIcon, HomeIcon, ShoppingBagIcon, DocumentTextIcon } from '@heroicons/react/24/outline';
+import { Link, useLocation, useNavigate } from 'react-router-dom'; // Added useNavigate
 import logo from './Assets/logo2.png';
 import { auth, db } from './Firebase';
 import { signOut } from 'firebase/auth';
-import { useEffect } from 'react';
 import { doc, getDoc } from 'firebase/firestore';
 import usericon from './Assets/user-icon.png';
 import { toast } from 'react-toastify';
-import Cart from './Cart'; // Import the Cart component
-import { useCart } from './CartContext'; // Import useCart
+import Cart from './Cart';
+import { useCart } from './CartContext';
+import LocalLoader from '../Loders/LocalLoader';
+import OrderHistory from './OrderHistory';
 
 const navigation = [
-  { name: 'HOME', to: '/home', current: false , icon:HomeIcon}, 
-  { name: 'PRODUCT', to: '/product', current: false,icon: ShoppingBagIcon },
+  { name: 'HOME', to: '/home', current: false, icon: HomeIcon },
+  { name: 'PRODUCT', to: '/product', current: false, icon: ShoppingBagIcon },
 ];
 
 function classNames(...classes) {
@@ -23,15 +24,19 @@ function classNames(...classes) {
 
 export default function Navbar() {
   const location = useLocation();
-  const { cart } = useCart(); // Get cart from useCart
-  const [isCartOpen, setIsCartOpen] = useState(false); // State for toggling the cart modal
-
+  const navigate = useNavigate(); // Added useNavigate
+  const { cart } = useCart();
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [userFirstName, setUserFirstName] = useState('');
   const [userLastName, setUserLastName] = useState('');
   const [userEmail, setUserEmail] = useState('');
+  const [isOrderPopupOpen, setIsOrderPopupOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false); // State to check if user is admin
 
   useEffect(() => {
     const fetchUserInfo = async () => {
+      setLoading(true);
       try {
         const user = auth.currentUser;
         if (user) {
@@ -41,10 +46,19 @@ export default function Navbar() {
             setUserFirstName(docSnap.data().firstName);
             setUserLastName(docSnap.data().lastName);
             setUserEmail(docSnap.data().email);
+
+            // Check if user is admin
+            const adminEmail = 'tanmoysantra911@gmail.com'; // Replace with your admin email
+            if (docSnap.data().email === adminEmail) {
+              setIsAdmin(true);
+              console.log('admin is here');
+            }
           }
         }
       } catch (error) {
         console.error('Error fetching user information:', error.message);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -53,12 +67,15 @@ export default function Navbar() {
 
   const handleSignOut = async () => {
     try {
+      setLoading(true);
       await signOut(auth);
       toast.success('Successfully signed out');
-      window.location.href = '/login';
+      navigate('/login'); // Use navigate instead of window.location.href
     } catch (error) {
       console.error('Error signing out:', error.message);
       toast.error(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -100,7 +117,7 @@ export default function Navbar() {
                         )}
                         aria-current={item.current ? 'page' : undefined}
                       >
-                         <item.icon className="h-4 w-4 mr-1 pb-1 inline" aria-hidden="true" />
+                        <item.icon className="h-4 w-4 mr-1 pb-1 inline" aria-hidden="true" />
                         {item.name}
                       </Link>
                     ))}
@@ -110,7 +127,7 @@ export default function Navbar() {
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                 <button
                   type="button"
-                  onClick={() => setIsCartOpen(true)} // Open cart modal
+                  onClick={() => setIsCartOpen(true)}
                   className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                 >
                   <span className="absolute -inset-1.5" />
@@ -152,45 +169,47 @@ export default function Navbar() {
                               alt="User avatar"
                             />
                           </div>
-                          <div className="ml-2 mt-2 text-xl font-medium text-gray-900 mx-auto  ">
+                          <div className="ml-2 mt-2 text-xl font-medium text-gray-900 mx-auto">
                             {userFirstName} {userLastName}
                           </div>
-                          <div className="ml-2 mt-2 text-sm font-small text-gray-900 mx-auto  ">
+                          <div className="ml-2 mt-2 text-sm font-small text-gray-900 mx-auto">
                             {userEmail}
                           </div>
                         </div>
                       )}
                     </MenuItem>
-                    {/* <MenuItem>
+                    <MenuItem>
                       {({ active }) => (
                         <button
                           type="button"
-                          onClick={handleSignOut}
+                          onClick={() => setIsOrderPopupOpen(true)}
                           className={classNames(
                             active ? 'bg-gray-100' : '',
                             'block px-4 py-2 text-sm text-white w-fit text-left btn-custom-color relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white  focus:ring-offset-2 focus:ring-offset-gray-800 mx-auto my-5 flex items-center px-4 py-2 text-sm text-gray-700 w-fit'
                           )}
                         >
-                         <ShoppingCartIcon className="h-5 w-5 mr-2" aria-hidden="true" />
+                          <ShoppingCartIcon className="h-5 w-5 mr-2" aria-hidden="true" />
                           Orders
                         </button>
                       )}
-                    </MenuItem> */}
-                    {/* <MenuItem>
-                      {({ active }) => (
-                        <button
-                          type="button"
-                          onClick={handleSignOut}
-                          className={classNames(
-                            active ? 'bg-gray-100' : '',
-                            'block px-4 py-2 text-sm text-white w-fit text-left btn-custom-color relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white  focus:ring-offset-2 focus:ring-offset-gray-800 mx-auto my-5 flex items-center px-4 py-2 text-sm text-gray-700 w-fit'
-                          )}
-                        >
-                        <CogIcon className="h-5 w-5 mr-2" aria-hidden="true" />
-                          Settings
-                        </button>
-                      )}
-                    </MenuItem> */}
+                    </MenuItem>
+                    {isAdmin && ( // Conditionally render the admin button
+                      <MenuItem>
+                        {({ active }) => (
+                          <button
+                            type="button"
+                            onClick={() => navigate('/admin-use-only')} // Navigate to AdminUseOnly page
+                            className={classNames(
+                              active ? 'bg-gray-100' : '',
+                              'block px-4 py-2 text-sm text-white w-fit text-left btn-custom-color relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white  focus:ring-offset-2 focus:ring-offset-gray-800 mx-auto my-5 flex items-center px-4 py-2 text-sm text-gray-700 w-fit'
+                            )}
+                          >
+                            <DocumentTextIcon className="h-5 w-5 mr-2" aria-hidden="true" />
+                            Admin Panel
+                          </button>
+                        )}
+                      </MenuItem>
+                    )}
                     <MenuItem>
                       {({ active }) => (
                         <button
@@ -201,7 +220,7 @@ export default function Navbar() {
                             'block px-4 py-2 text-sm text-white w-fit text-left btn-custom-color relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white  focus:ring-offset-2 focus:ring-offset-gray-800 mx-auto my-5 flex items-center px-4 py-2 text-sm text-gray-700 w-fit'
                           )}
                         >
-                         <ArrowLeftOnRectangleIcon className="h-5 w-5 mr-2" aria-hidden="true" />
+                          <ArrowLeftOnRectangleIcon className="h-5 w-5 mr-2" aria-hidden="true" />
                           Sign out
                         </button>
                       )}
@@ -231,7 +250,9 @@ export default function Navbar() {
             </div>
           </Disclosure.Panel>
 
-          <Cart isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} /> {/* Render the Cart component */}
+          <Cart isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
+          <OrderHistory isOpen={isOrderPopupOpen} onClose={() => setIsOrderPopupOpen(false)} userEmail={userEmail} />
+          {loading && <LocalLoader />}
         </>
       )}
     </Disclosure>

@@ -51,13 +51,13 @@ const Cart = ({ isOpen, onClose }) => {
                 <div className="flex mt-2 sm:mt-0">
                   <button 
                     onClick={() => handleShopNow(product)} 
-                    className="bg-purple-500 text-white p-2 rounded-lg mr-2"
+                    className="bg-purple-500 text-white p-2 rounded-lg mr-2 btn-custom-color"
                   >
                     Shop Now
                   </button>
                   <button 
                     onClick={() => handleRemoveFromCart(product)} 
-                    className="bg-red-500 text-white p-2 rounded-lg"
+                    className="bg-red-500 text-white p-2 rounded-lg btn-custom-color"
                   >
                     Remove
                   </button>
