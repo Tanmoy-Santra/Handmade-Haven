@@ -45,7 +45,7 @@ const Cart = ({ isOpen, onClose }) => {
                   <div className="ml-4">
                     <p className="text-lg font-bold">{product.product_name}</p>
                     <p className="text-sm">{product.description}</p>
-                    <p className="text-sm">${product.new_price.toFixed(2)}</p>
+                    <p className="text-sm">₹ {product.new_price.toFixed(2)}</p>
                   </div>
                 </div>
                 <div className="flex mt-2 sm:mt-0">

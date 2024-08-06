@@ -3,7 +3,7 @@ import { auth, db } from "../component/Firebase";
 import { setDoc, doc } from "firebase/firestore";
 import { useNavigate } from 'react-router-dom';
 import { toast } from "react-toastify";
-import logo from '../component/Assets/loginlogo.png';
+import logo from '../component/Assets/login-logo-new.png';
 import { FaUser, FaPhone, FaMapMarkerAlt } from 'react-icons/fa'; // Import icons from react-icons
 import UniversalLoader from '../Loders/UniversalLoader'; // Import the UniversalLoader component
 
@@ -79,7 +79,7 @@ const FillDetails = () => {
         <UniversalLoader />
       ) : (
         <form onSubmit={handleFillDetails} className="bg-white p-6 rounded shadow-md w-full max-w-sm">
-          <img className="h-30 w-auto" src={logo} alt="Your Company" />
+          <img className="h-30 w-auto mb-4" src={logo} alt="Your Company" />
           <h3 className="text-2xl font-bold mb-4">Fill Your Details</h3>
 
           <div className="mb-4">

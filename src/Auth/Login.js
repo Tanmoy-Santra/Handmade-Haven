@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
-import logo from '../component/Assets/loginlogo.png';
+import logo from '../component/Assets/login-logo-new.png';
 import { toast } from "react-toastify";
 import { auth } from "../component/Firebase";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
@@ -40,7 +40,7 @@ const Login = () => {
         <UniversalLoader />
       ) : (
         <div className="bg-white p-6 rounded shadow-md w-full max-w-sm">
-          <img className="h-30 w-auto" src={logo} alt="Your Company" />
+          <img className="h-30 w-auto mb-4" src={logo} alt="Your Company" />
           <button
             onClick={handleGoogleSignIn}
             className="w-full flex items-center justify-center px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline btn-custom-color"

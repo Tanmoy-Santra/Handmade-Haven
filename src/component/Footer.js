@@ -127,7 +127,7 @@ const Footer = () => {
             </a>
         </div>
         <div className="text-center pt-10 sm:pt-12 font-light flex items-center justify-center">
-        &copy; {new Date().getFullYear()} Handmade Haven | All rights reserved.
+        &copy; {new Date().getFullYear()} Rangmanch | All rights reserved.
         </div>
     </div>
 </footer>

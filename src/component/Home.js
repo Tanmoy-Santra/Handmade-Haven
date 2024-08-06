@@ -14,10 +14,10 @@ const Home = () => {
     <div className="w-full py-12 px-4 sm:px-6 lg:py-16 lg:px-8 z-20">
         <h2 className="text-3xl font-extrabold text-black sm:text-4xl text-white">
             <span className="block">
-            Welcome to Handmade Haven
+            Welcome to Rangmanch
             </span>
         </h2>
-        <p className="text-md mt-4 text-gray-500 text-white">
+        <p className="text-md mt-4 text-gray-500 text-white ">
             TDiscover the beauty of unique, handcrafted items created with love and care. Each piece tells a story and adds a personal touch to your home and life.
         </p>
         <div className="lg:mt-0 lg:flex-shrink-0">
@@ -40,17 +40,17 @@ const Home = () => {
 
 
 
-<div className="relative z-20 flex items-center bg-white dark:bg-gray-800 bg-custom-middle">
-    <div className="container relative flex flex-col items-center justify-between px-6 py-8 mx-auto">
+<div className="relative  flex items-center bg-white dark:bg-gray-800 bg-custom-middle">
+    <div className="container relative flex flex-col items-center justify-between px-6 py-8 mx-auto ">
         <div className="flex flex-col">
-            <h1 className="w-full text-4xl font-light text-center text-gray-800 uppercase sm:text-3xl dark:text-white text-white">
+            <h1 className="w-full text-4xl font-light text-center text-gray-800 uppercase sm:text-3xl dark:text-white text-white ">
                 Enhance Your Home with Handmade Crafts
             </h1>
             <hr className="w-half my-2 border-white-300 dark:border-white-600"/>
-            <h2 className="w-full max-w-2xl py-8 mx-auto text-l font-light text-center text-gray-800 dark:text-white text-white font-bold">
+            <h2 className="w-full max-w-2xl py-8 mx-auto text-l font-light text-center text-gray-800 dark:text-white text-white font-bold ">
                 Handmade crafts enrich homes with unique charm and personalization. They showcase meticulous craftsmanship and attention to detail, offering quality and authenticity that mass-produced items often lack. These crafts support local artisans, promote sustainability, and use eco-friendly materials, contributing to a more conscious lifestyle. They not only enhance home aesthetics but also tell stories of creativity and passion, adding warmth and character to living spaces.
             </h2>
-            <div className="flex items-center justify-center mt-4">
+            <div className="flex items-center justify-center mt-4 ">
                 <Link to="/Product" className="px-4 py-2 mr-4 text-white uppercase bg-gray-800 text-md hover:bg-gray-900 btn-custom-color">
                     Get started
                 </Link>

@@ -3,7 +3,7 @@ import QRCode from 'qrcode.react';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import emailjs from 'emailjs-com'; // Import emailjs-com library
-import logoIcon from './Assets/bg-white.png';
+import logoIcon from './Assets/logo-rangmanch.png';
 import { toast } from 'react-toastify';
 import { db, storage } from './Firebase'; // Import Firebase Firestore and Storage
 import { auth} from './Firebase';
@@ -94,11 +94,38 @@ const BillPopup = ({ product, quantity, totalPrice, user, onClose }) => {
   };
 
   // Handle confirm order button click
+  // const handleConfirmOrder = async () => {
+  //   if (validateFields()) {
+  //     setLoading(true);
+  //     try {
+  //       const imageUrl = await uploadImageToStorage(product.image);
+  //       await saveOrderToFirestore(imageUrl);
+  //       sendEmail(); // Send email when order is confirmed
+  //       toast.success('Order confirmed!', { position: 'top-center' });
+  //       downloadBill();
+  //       onClose();
+  //     } catch (error) {
+  //       console.error('Error saving order:', error);
+  //       toast.error('Failed to confirm order. Please try again.', { position: 'top-center' });
+  //     } finally {
+  //       setLoading(false); // Hide loader
+  //     }
+  //   } else {
+  //     toast.error('Please fill in all required fields correctly.', { position: 'top-center' });
+  //   }
+  // };
   const handleConfirmOrder = async () => {
     if (validateFields()) {
       setLoading(true);
       try {
-        const imageUrl = await uploadImageToStorage(product.image);
+        let imageUrl;
+        // Check if the product image is a URL
+        if (typeof product.image === 'string' && product.image.startsWith('http')) {
+          imageUrl = product.image;
+        } else {
+          // Upload the image file to storage and get the URL
+          imageUrl = await uploadImageToStorage(product.image);
+        }
         await saveOrderToFirestore(imageUrl);
         sendEmail(); // Send email when order is confirmed
         toast.success('Order confirmed!', { position: 'top-center' });
@@ -114,6 +141,7 @@ const BillPopup = ({ product, quantity, totalPrice, user, onClose }) => {
       toast.error('Please fill in all required fields correctly.', { position: 'top-center' });
     }
   };
+  
 
   // Function to upload image to Firebase Storage
   const uploadImageToStorage = async (imageUrl) => {
@@ -173,8 +201,7 @@ const BillPopup = ({ product, quantity, totalPrice, user, onClose }) => {
           Order Details 
           --------------------------------- 
           Product ID : ${product.product_id} 
-          Product Name : ${product.product_name}
-          Product Image: ${product.image}
+          Product Name : ${product.product_name}         
           Total Quantity : ${quantity} 
           Total Price : ${totalPrice.toFixed(2)} 
           Customer Name : ${user.name}
@@ -207,11 +234,11 @@ const BillPopup = ({ product, quantity, totalPrice, user, onClose }) => {
       // Add watermark
       doc.setFontSize(30);
       doc.setTextColor(150);
-      doc.text('Handmade Haven', 35, 150, { angle: -45 });
+      doc.text('Rangmanch', 35, 200, { angle: -45 });
 
       // Add logo (assuming logoIcon is a base64 string)
       const logo = logoIcon;
-      doc.addImage(logo, 'PNG', 160, 10, 40, 40);
+      doc.addImage(logo, 'PNG', 150, 10, 40, 40);
 
       // Order Summary
       doc.setFontSize(16);
@@ -224,7 +251,7 @@ const BillPopup = ({ product, quantity, totalPrice, user, onClose }) => {
         { key: 'Product ID', value: product.product_id },
         { key: 'Product Name', value: product.product_name },
         { key: 'Total Quantity', value: quantity },
-        { key: 'Total Price', value: `$${totalPrice.toFixed(2)}` },
+        { key: 'Total Price', value: `Rs.${totalPrice.toFixed(2)}` },
         { key: 'User', value: user.name },
         { key: 'Email', value: user.email },
         { key: 'Order Date', value: currentDate },
@@ -263,7 +290,7 @@ const BillPopup = ({ product, quantity, totalPrice, user, onClose }) => {
       }
 
       // Save the PDF
-      doc.save('order_summary.pdf');
+      doc.save(`${product.product_name}.pdf`);
     } catch (error) {
       console.error('Error generating PDF:', error);
       toast.error('Error generating PDF !!', { position: 'top-center' });

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Disclosure, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
-import { Bars3Icon, ShoppingCartIcon, XMarkIcon, ArrowLeftOnRectangleIcon, HomeIcon, ShoppingBagIcon, DocumentTextIcon } from '@heroicons/react/24/outline';
+import { Bars3Icon, ShoppingCartIcon, XMarkIcon, ArrowLeftOnRectangleIcon, HomeIcon, ShoppingBagIcon, DocumentTextIcon, PencilIcon } from '@heroicons/react/24/outline';
 import { Link, useLocation, useNavigate } from 'react-router-dom'; // Added useNavigate
-import logo from './Assets/logo2.png';
+import logo from './Assets/logo-rangmanch.png';
 import { auth, db } from './Firebase';
 import { signOut } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
@@ -31,6 +31,7 @@ export default function Navbar() {
   const [userFirstName, setUserFirstName] = useState('');
   const [userLastName, setUserLastName] = useState('');
   const [userEmail, setUserEmail] = useState('');
+  const [userPhoto, setUserPhoto] = useState('');
   const [isOrderPopupOpen, setIsOrderPopupOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false); // State to check if user is admin
 
@@ -46,6 +47,7 @@ export default function Navbar() {
             setUserFirstName(docSnap.data().firstName);
             setUserLastName(docSnap.data().lastName);
             setUserEmail(docSnap.data().email);
+            setUserPhoto(docSnap.data().photo);
 
             // Check if user is admin
             const adminEmail = 'tanmoysantra911@gmail.com'; // Replace with your admin email
@@ -79,11 +81,7 @@ export default function Navbar() {
     }
   };
 
-  const getInitial = (name) => {
-    if (!name) return '';
-    return name.charAt(0).toUpperCase();
-  };
-
+  
   return (
     <Disclosure as="nav" className="custom-nav-bg fixed top-0 w-full z-50">
       {({ open }) => (
@@ -145,9 +143,8 @@ export default function Navbar() {
                     <MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                       <span className="absolute -inset-1.5" />
                       <span className="sr-only">Open user menu</span>
-                      <div className="flex items-center justify-center w-8 h-8 bg-purple-500 text-white font-xl font-bold rounded-full">
-                        {getInitial(userFirstName)}
-                      </div>
+                      <img className="flex items-center justify-center w-8 h-8  text-white font-xl font-bold rounded-full"
+                        src={userPhoto}/>                      
                     </MenuButton>
                   </div>
                   <MenuItems
@@ -157,25 +154,32 @@ export default function Navbar() {
                     <MenuItem>
                       {({ active }) => (
                         <div
-                          className={classNames(
-                            active ? 'bg-gray-100' : '',
-                            'block px-4 py-2 text-sm text-gray-700 w-full text-left'
-                          )}
-                        >
-                          <div className="flex items-center">
-                            <img
-                              className="h-20 w-20 rounded-full object-cover mx-auto"
-                              src={usericon}
-                              alt="User avatar"
-                            />
-                          </div>
-                          <div className="ml-2 mt-2 text-xl font-medium text-gray-900 mx-auto">
-                            {userFirstName} {userLastName}
-                          </div>
-                          <div className="ml-2 mt-2 text-sm font-small text-gray-900 mx-auto">
-                            {userEmail}
-                          </div>
-                        </div>
+                  className={classNames(
+                    active ? 'bg-gray-100' : '',
+                    'block px-4 py-2 text-sm text-gray-700 w-full text-left'
+                  )}
+                >
+                  <div className="flex items-center relative">
+                    <img
+                      className="h-20 w-20 rounded-full object-cover mx-auto"
+                      src={userPhoto}
+                      alt="User avatar"
+                    />
+                    <button
+                      className="absolute top-0 right-0 m-1 p-2 text-white bg-purple-500 rounded-full hover:bg-purple-700"
+                      onClick={() => navigate('/edit-profile')}
+                      aria-label="Edit profile"
+                    >
+                      <PencilIcon className="h-5 w-5 bg-transparent" />
+                    </button>
+                  </div>
+                  <div className="ml-2 mt-2 text-xl font-medium text-gray-900 mx-auto">
+                    {userFirstName} {userLastName}
+                  </div>
+                  <div className="ml-2 mt-2 text-sm font-small text-gray-900 mx-auto">
+                    {userEmail}
+                  </div>
+                </div>
                       )}
                     </MenuItem>
                     <MenuItem>

@@ -37,7 +37,7 @@ const OrderHistory= ({ isOpen, onClose, userEmail }) => {
   }, [userEmail]);
 
   return (
-    <Dialog open={isOpen} onClose={onClose} className="fixed inset-0 z-60 overflow-y-auto bg-gray-800 bg-opacity-50 mt-10">
+    <Dialog open={isOpen} onClose={onClose} className="fixed inset-0 z-80 overflow-y-auto bg-gray-800 bg-opacity-50 mt-10">
       <div className="flex items-center justify-center min-h-screen px-4 py-6">
         <div className="bg-white rounded-lg p-6 w-full max-w-lg">
           <div className="flex justify-between items-center mb-4">
@@ -68,14 +68,14 @@ const OrderHistory= ({ isOpen, onClose, userEmail }) => {
                         <div className="text-sm">Quantity: {order.quantity}</div>
                         <div className="text-sm">Total Price: ₹{order.total_price}</div>
                         <div className="text-sm">Order Date: {order.order_date}</div>
-                        <br></br>
-                        <Link
+                        {/* <br></br> */}
+                        {/* <Link
                          to={`/product/${order.product_id}`}
                         className="button bg-purple-500 text-white p-2 rounded-lg mt-10"
                     >
                     Repeat Order
-                  </Link>
-                  <br></br><br></br>
+                  </Link> */}
+                  {/* <br></br><br></br> */}
                     </div>
                     </div>
                 </li>
