@@ -5,7 +5,6 @@
 - A Handmade Craft Shopping Website .
 - User friendly interface .
 - Include Login Authentication .
-- Include OTP varification by email .
 - With organized Data storage system .
 - Providing online payment feature .
 - Including Billing Process .
@@ -19,27 +18,6 @@
 
 ![WhatsApp Image 2024-08-06 at 21 51 20_374b2dac](https://github.com/user-attachments/assets/c88ae8ad-8117-4a58-85df-848dc39f6f72)
 
-<div class="flex flex-wrap">
-  <div class="w-1/2 p-2">
-    <div class="bg-white shadow-md rounded-lg overflow-hidden">
-      <img class="w-full h-32 object-cover" src="src/component/Assets/phone.jpg" alt="Card Image 1">       
-      </img>
-      <div class="p-4">
-        <h3 class="text-lg font-bold">Card Title 1</h3>
-        <p class="text-gray-600">Description for card 1.</p>
-      </div>
-    </div>
-  </div>
-  <div class="w-1/2 p-2">
-    <div class="bg-white shadow-md rounded-lg overflow-hidden">
-      <img class="w-full h-32 object-cover" src="src/component/Assets/phone2.jpg" alt="Card Image 2">
-      <div class="p-4">
-        <h3 class="text-lg font-bold">Card Title 2</h3>
-        <p class="text-gray-600">Description for card 2.</p>
-      </div>
-    </div>
-  </div>
-</div>
 
 
 # Tools 
