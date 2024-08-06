@@ -22,9 +22,8 @@
 <div class="flex flex-wrap">
   <div class="w-1/2 p-2">
     <div class="bg-white shadow-md rounded-lg overflow-hidden">
-      <div class="w-full h-32 object-cover" src="image1.jpg" alt="Card Image 1">
-        ![WhatsApp Image 2024-08-06 at 21 36 13_9f4a3568](https://github.com/user-attachments/assets/eb985cfd-88fe-4c98-8d0f-746137435e7e)
-      </div>
+      <img class="w-full h-32 object-cover" src="src/component/Assets/phone.jpg" alt="Card Image 1">       
+      </img>
       <div class="p-4">
         <h3 class="text-lg font-bold">Card Title 1</h3>
         <p class="text-gray-600">Description for card 1.</p>
@@ -33,7 +32,7 @@
   </div>
   <div class="w-1/2 p-2">
     <div class="bg-white shadow-md rounded-lg overflow-hidden">
-      <img class="w-full h-32 object-cover" src="image2.jpg" alt="Card Image 2">
+      <img class="w-full h-32 object-cover" src="src/component/Assets/phone2.jpg" alt="Card Image 2">
       <div class="p-4">
         <h3 class="text-lg font-bold">Card Title 2</h3>
         <p class="text-gray-600">Description for card 2.</p>
