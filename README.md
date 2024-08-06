@@ -13,13 +13,35 @@
 # [Demo ](https://handmadehaven-4a693.web.app/)
 
 
-![WhatsApp Image 2024-07-17 at 22 47 59_20fcfaae](https://github.com/user-attachments/assets/bb113d35-103c-47a7-b9e8-592def8c1ad2)
+![WhatsApp Image 2024-08-06 at 21 41 53_e943a482](https://github.com/user-attachments/assets/f3a001fa-9d5e-4fa5-b8e8-83d2210d93fd)
 
-![WhatsApp Image 2024-07-17 at 22 45 22_0f9c3025](https://github.com/user-attachments/assets/238bbd76-920e-42cf-b362-ada1841d9b8a)
+![WhatsApp Image 2024-08-06 at 21 51 49_cce803cb](https://github.com/user-attachments/assets/bde9187f-221e-4e75-8d3c-ad026d572ff8)
 
-![WhatsApp Image 2024-07-17 at 22 46 10_1c54aeb3](https://github.com/user-attachments/assets/f666652b-f883-4e61-860e-3eb377c3ad88)
+![WhatsApp Image 2024-08-06 at 21 51 20_374b2dac](https://github.com/user-attachments/assets/c88ae8ad-8117-4a58-85df-848dc39f6f72)
 
-![WhatsApp Image 2024-07-17 at 22 46 40_659f4edf](https://github.com/user-attachments/assets/cd08a346-5aae-48bb-b9d5-7d71acf2afc3)
+<div class="flex flex-wrap">
+  <div class="w-1/2 p-2">
+    <div class="bg-white shadow-md rounded-lg overflow-hidden">
+      <div class="w-full h-32 object-cover" src="image1.jpg" alt="Card Image 1">
+        ![WhatsApp Image 2024-08-06 at 21 36 13_9f4a3568](https://github.com/user-attachments/assets/eb985cfd-88fe-4c98-8d0f-746137435e7e)
+      </div>
+      <div class="p-4">
+        <h3 class="text-lg font-bold">Card Title 1</h3>
+        <p class="text-gray-600">Description for card 1.</p>
+      </div>
+    </div>
+  </div>
+  <div class="w-1/2 p-2">
+    <div class="bg-white shadow-md rounded-lg overflow-hidden">
+      <img class="w-full h-32 object-cover" src="image2.jpg" alt="Card Image 2">
+      <div class="p-4">
+        <h3 class="text-lg font-bold">Card Title 2</h3>
+        <p class="text-gray-600">Description for card 2.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 # Tools 
 <p>
