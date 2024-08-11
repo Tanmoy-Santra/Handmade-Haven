@@ -50,7 +50,7 @@ export default function Navbar() {
             setUserPhoto(docSnap.data().photo);
 
             // Check if user is admin
-            const adminEmail = 'tanmoysantra911@gmail.com'; // Replace with your admin email
+            const adminEmail = process.env.REACT_APP_ADMIN_ID; // Replace with your admin email
             if (docSnap.data().email === adminEmail) {
               setIsAdmin(true);
               console.log('admin is here');
